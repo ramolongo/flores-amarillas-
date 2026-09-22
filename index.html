@@ -137,16 +137,44 @@ function startLoveShow(){
 }
 
 function launchBouquets(){
-  for(let i=0;i<28;i++){setTimeout(()=>{
-    const b=document.createElement("div"); b.className="bouquetFly"; b.textContent="💐"; b.style.left=(Math.random()*100)+"vw"; b.style.setProperty("--dx",((Math.random()-.5)*220)+"px"); b.style.setProperty("--rot",((Math.random()-.5)*80)+"deg"); b.style.animationDuration=(5+Math.random()*4)+"s"; loveStage.appendChild(b); setTimeout(()=>b.remove(),10000)
-  },i*180)}
-  for(let i=0;i<45;i++){setTimeout(()=>{
-    const p=document.createElement("div"); p.className="petalFly"; p.textContent="🌼"; p.style.left=(Math.random()*100)+"vw"; p.style.setProperty("--px",((Math.random()-.5)*260)+"px"); p.style.animationDuration=(4+Math.random()*5)+"s"; loveStage.appendChild(p); setTimeout(()=>p.remove(),10000)
-  },i*90)}
+  stopBouquetLoop();
+  const spawnBouquet=()=>{
+    if(loveStage.classList.contains("hiddenLove")) return;
+    const b=document.createElement("div");
+    b.className="bouquetFly";
+    b.textContent="💐";
+    b.style.left=(Math.random()*100)+"vw";
+    b.style.setProperty("--dx",((Math.random()-.5)*220)+"px");
+    b.style.setProperty("--rot",((Math.random()-.5)*80)+"deg");
+    b.style.animationDuration=(5+Math.random()*4)+"s";
+    loveStage.appendChild(b);
+    setTimeout(()=>b.remove(),10000);
+  };
+  const spawnPetal=()=>{
+    if(loveStage.classList.contains("hiddenLove")) return;
+    const p=document.createElement("div");
+    p.className="petalFly";
+    p.textContent="🌼";
+    p.style.left=(Math.random()*100)+"vw";
+    p.style.setProperty("--px",((Math.random()-.5)*260)+"px");
+    p.style.animationDuration=(4+Math.random()*5)+"s";
+    loveStage.appendChild(p);
+    setTimeout(()=>p.remove(),10000);
+  };
+  for(let i=0;i<10;i++) setTimeout(spawnBouquet,i*250);
+  for(let i=0;i<18;i++) setTimeout(spawnPetal,i*180);
+  loveStage._bouquetTimer=setInterval(spawnBouquet,2200);
+  loveStage._petalTimer=setInterval(spawnPetal,1200);
+}
+function stopBouquetLoop(){
+  if(loveStage._bouquetTimer){clearInterval(loveStage._bouquetTimer);loveStage._bouquetTimer=null}
+  if(loveStage._petalTimer){clearInterval(loveStage._petalTimer);loveStage._petalTimer=null}
+  loveStage.querySelectorAll(".bouquetFly,.petalFly").forEach(x=>x.remove());
 }
 
 function closeLoveStage(){
   stopPhotoFlowerLoop();
+  stopBouquetLoop();
   if(window._surpriseFlowerTimer){clearInterval(window._surpriseFlowerTimer);window._surpriseFlowerTimer=null}
   document.querySelectorAll(".surpriseFlower").forEach(f=>f.remove());
   if(loveStage._loveTimer) clearInterval(loveStage._loveTimer);
