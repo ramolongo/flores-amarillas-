@@ -35,6 +35,7 @@ document.querySelector("#loveBack").onclick=()=>{
 function createFlowerLoop(container, className, zIndex){
   let timer=null;
   const spawn=()=>{
+    if(!container) return;
     const templates=[...document.querySelectorAll("main.scene > .flower")];
     if(!templates.length) return;
     const f=templates[Math.floor(Math.random()*templates.length)].cloneNode(true);
@@ -52,8 +53,20 @@ function createFlowerLoop(container, className, zIndex){
   timer=setInterval(spawn,5000);
   return timer;
 }
-function startPhotoFlowerLoop(){stopPhotoFlowerLoop();loveStage._photoFlowerTimer=createFlowerLoop(loveStage,"photoFlower",31)}
-function stopPhotoFlowerLoop(){if(loveStage._photoFlowerTimer){clearInterval(loveStage._photoFlowerTimer);loveStage._photoFlowerTimer=null}loveStage.querySelectorAll(".photoFlower").forEach(f=>f.remove())}
+function startPhotoFlowerLoop(){stopPhotoFlowerLoop();for(let i=0;i<8;i++)setTimeout(()=>createPhotoBouquet(),i*700);loveStage._photoFlowerTimer=setInterval(createPhotoBouquet,2200)}
+function createPhotoBouquet(){
+  if(loveStage.classList.contains("hiddenLove")) return;
+  const b=document.createElement("div");
+  b.className="bouquetFly photoBouquet";
+  b.textContent="💐";
+  b.style.left=(Math.random()*100)+"vw";
+  b.style.setProperty("--dx",((Math.random()-.5)*220)+"px");
+  b.style.setProperty("--rot",((Math.random()-.5)*80)+"deg");
+  b.style.animationDuration=(5+Math.random()*4)+"s";
+  loveStage.appendChild(b);
+  setTimeout(()=>b.remove(),10000);
+}
+function stopPhotoFlowerLoop(){if(loveStage._photoFlowerTimer){clearInterval(loveStage._photoFlowerTimer);loveStage._photoFlowerTimer=null}loveStage.querySelectorAll(".photoFlower,.photoBouquet").forEach(f=>f.remove())}
 
 function startLoveShow(){
   startPhotoFlowerLoop();
