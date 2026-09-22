@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flores para ti 🌻</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Poppins:wght@300;400;600&display=swap');
+:root{--yellow:#ffd43b;--gold:#f5a800;--dark:#3d2a00}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Poppins,sans-serif}
+body{overflow-x:hidden;color:var(--dark);background:radial-gradient(circle at 50% 10%,#fffdf0 0,#fff5b8 45%,#f6cf4d 100%)}
+.scene{min-height:100vh;position:relative;display:grid;place-items:center;padding:28px 18px;overflow:hidden}
+.glow{position:absolute;width:70vmin;height:70vmin;border-radius:50%;background:#fff6a6;filter:blur(55px);opacity:.65;animation:pulse 5s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.12);opacity:.9}}
+.card{position:relative;z-index:5;width:min(760px,94vw);padding:38px 28px 34px;text-align:center;border:1px solid rgba(255,255,255,.75);border-radius:32px;background:rgba(255,255,255,.38);backdrop-filter:blur(14px);box-shadow:0 25px 70px rgba(95,60,0,.18)}
+h1{font-family:"DM Serif Display",serif;font-size:clamp(2.5rem,8vw,5.2rem);margin:0;color:#8a5a00;line-height:1}
+.subtitle{margin:12px auto 22px;font-size:clamp(1rem,2.8vw,1.2rem);max-width:600px}
+.message{min-height:82px;margin:22px auto;font-family:"DM Serif Display",serif;font-size:clamp(1.35rem,4vw,2rem);line-height:1.35;transition:opacity .35s,transform .35s}
+.message.hide{opacity:0;transform:translateY(8px)}
+button{border:0;border-radius:999px;padding:13px 22px;background:#8a5a00;color:#fff;font:600 1rem Poppins;cursor:pointer;box-shadow:0 8px 20px #8a5a0033}button:hover{transform:translateY(-2px)}button:active{transform:translateY(0)}
+.small{margin-top:16px;font-size:.82rem;opacity:.65}
+.flower-field{position:absolute;inset:0;pointer-events:none}.flower{position:absolute;bottom:-35px;width:var(--size);height:calc(var(--size)*1.45);transform-origin:bottom center;animation:sway var(--sway) ease-in-out infinite alternate}
+@keyframes sway{to{transform:rotate(var(--rot))}}
+.stem{position:absolute;bottom:0;left:50%;width:7px;height:78%;border-radius:8px;background:linear-gradient(90deg,#2e6836,#5b9b4f);transform:translateX(-50%)}
+.leaf{position:absolute;width:45%;height:16%;background:#4e9147;border-radius:100% 0 100% 0}.leaf.a{left:7%;bottom:35%;transform:rotate(-28deg)}.leaf.b{right:5%;bottom:48%;transform:scaleX(-1) rotate(-28deg)}
+.head{position:absolute;top:0;left:50%;width:72%;aspect-ratio:1;transform:translateX(-50%);animation:bloom 3.8s ease-in-out infinite}@keyframes bloom{50%{transform:translateX(-50%) scale(1.05)}}
+.petal{position:absolute;left:50%;top:50%;width:43%;height:70%;background:radial-gradient(circle at 50% 20%,#fff27b,#ffd43b 62%,#e9a600);border-radius:55% 55% 45% 45%;transform-origin:50% 100%;box-shadow:0 2px 5px #a86f0030}
+.petal:nth-child(1){transform:translate(-50%,-100%) rotate(0)}.petal:nth-child(2){transform:translate(-50%,-100%) rotate(45deg)}.petal:nth-child(3){transform:translate(-50%,-100%) rotate(90deg)}.petal:nth-child(4){transform:translate(-50%,-100%) rotate(135deg)}.petal:nth-child(5){transform:translate(-50%,-100%) rotate(180deg)}.petal:nth-child(6){transform:translate(-50%,-100%) rotate(225deg)}.petal:nth-child(7){transform:translate(-50%,-100%) rotate(270deg)}.petal:nth-child(8){transform:translate(-50%,-100%) rotate(315deg)}
+.center{position:absolute;left:50%;top:50%;width:25%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#6b4200,#a86c00 65%,#6e4300)}
+.flower:nth-child(1){left:3%;--size:135px;--sway:4s;--rot:-5deg}.flower:nth-child(2){left:18%;--size:105px;--sway:3.5s;--rot:6deg;animation-delay:-1s}.flower:nth-child(3){right:16%;--size:120px;--sway:4.4s;--rot:-7deg;animation-delay:-2s}.flower:nth-child(4){right:2%;--size:150px;--sway:3.8s;--rot:5deg;animation-delay:-.7s}.flower:nth-child(5){left:43%;--size:95px;--sway:4.7s;--rot:4deg;animation-delay:-1.7s}
+.sparkle{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 12px 4px #fff7a6;animation:float 5s linear infinite;opacity:0}@keyframes float{0%{transform:translateY(30px) scale(.4);opacity:0}25%,75%{opacity:.8}100%{transform:translateY(-100px) scale(1.2);opacity:0}}
+@media(max-width:600px){.card{padding:32px 20px 28px}.flower:nth-child(1),.flower:nth-child(4){--size:100px}.flower:nth-child(2),.flower:nth-child(3){--size:78px}.flower:nth-child(5){--size:65px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<main class="scene"><div class="glow"></div><div class="flower-field" aria-hidden="true">
+<div class="flower"><div class="stem"></div><div class="leaf a"></div><div class="leaf b"></div><div class="head"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><b class="center"></b></div></div><div class="flower"><div class="stem"></div><div class="leaf a"></div><div class="leaf b"></div><div class="head"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><b class="center"></b></div></div><div class="flower"><div class="stem"></div><div class="leaf a"></div><div class="leaf b"></div><div class="head"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><b class="center"></b></div></div><div class="flower"><div class="stem"></div><div class="leaf a"></div><div class="leaf b"></div><div class="head"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><b class="center"></b></div></div><div class="flower"><div class="stem"></div><div class="leaf a"></div><div class="leaf b"></div><div class="head"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><b class="center"></b></div></div>
+</div>
+<section class="card" aria-label="Dedicatoria"><h1>Flores amarillas para ti</h1><p class="subtitle">Porque hay personas que merecen un pequeño pedacito de sol en forma de flores.</p><div id="message" class="message">“Que estas flores iluminen tu día y te recuerden lo especial que eres.”</div><button id="next" type="button">Ver otro mensaje</button><div class="small">21 de septiembre · hecho especialmente para ti</div></section></main>
+<script>
+const messages=["“Que estas flores iluminen tu día y te recuerden lo especial que eres.”","“Así como el sol ilumina las flores, tú haces más bonito cada día.”","“Un pequeño detalle para alguien que merece cosas bonitas todos los días.”","“Que nunca te falten motivos para sonreír, sueños por cumplir y flores que te recuerden lo mucho que vales.”","“Hoy las flores son amarillas, pero la razón de sonreír eres tú.”"];
+const box=document.querySelector("#message");let index=0;
+document.querySelector("#next").addEventListener("click",()=>{box.classList.add("hide");setTimeout(()=>{index=(index+1)%messages.length;box.textContent=messages[index];box.classList.remove("hide")},300)});
+const scene=document.querySelector(".scene");for(let i=0;i<18;i++){const s=document.createElement("span");s.className="sparkle";s.style.left=Math.random()*100+"%";s.style.top=(25+Math.random()*70)+"%";s.style.animationDelay=Math.random()*5+"s";s.style.animationDuration=(4+Math.random()*4)+"s";scene.appendChild(s)}
+</script></body></html>
