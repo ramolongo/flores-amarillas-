@@ -21,10 +21,11 @@ teAmoBtn.classList.remove("hidden");
 teAmoBtn.onclick=()=>{
   loveStage.classList.remove("hiddenLove");
   startLoveShow();
+  launchBouquets();
 };
 
 document.querySelector("#loveBack").onclick=()=>{
-  loveStage.classList.add("hiddenLove");
+  closeLoveStage();
 };
 
 function startLoveShow(){
@@ -84,14 +85,15 @@ function launchBouquets(){
   for(let i=0;i<45;i++){setTimeout(()=>{
     const p=document.createElement("div"); p.className="petalFly"; p.textContent="🌼"; p.style.left=(Math.random()*100)+"vw"; p.style.setProperty("--px",((Math.random()-.5)*260)+"px"); p.style.animationDuration=(4+Math.random()*5)+"s"; loveStage.appendChild(p); setTimeout(()=>p.remove(),10000)
   },i*90)}
-  launchBouquets();
 }
 
-document.querySelector("#loveBack").onclick=()=>{
+function closeLoveStage(){
   if(loveStage._loveTimer) clearInterval(loveStage._loveTimer);
   if(loveStage._loveMusic){loveStage._loveMusic.pause();loveStage._loveMusic.currentTime=0;}
   if(loveStage._loveShow) loveStage._loveShow.remove();
   loveStage.classList.add("hiddenLove");
-};
+}
+
+document.querySelector("#loveBack").onclick=closeLoveStage;
 document.querySelector("#restart").onclick=()=>location.reload();
 </script></body></html>
