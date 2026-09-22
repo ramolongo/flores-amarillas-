@@ -9,31 +9,7 @@
 <section id="surprise" class="surprise hidden"><h2>¡Tengo algo más para ti!</h2><div class="catbox"><img class="realcat" src="./gatito-flores.jpeg" alt="Gatito entre flores"><div class="cat"><div class="ear"></div><div class="ear r"></div><div class="head"><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="mouth"></div></div><div class="body"></div><div class="arm"><div class="paw"></div></div><div class="bouquet"><i class="flowerMini fm1"></i><i class="flowerMini fm2"></i><i class="flowerMini fm3"></i><div class="wrap"></div></div></div></div><div class="speech" id="speech"></div><button id="teAmoBtn" class="hidden">Te amo ❤️</button><button id="restart">Volver a ver las flores 🌻</button></section>
 <section id="loveStage" class="loveStage hiddenLove"><div class="loveTitle">Te amo preciosa ❤️❤️</div><button id="loveBack" class="loveBack">Volver a ver las flores 🌻</button></section></main><script>
 const messages=["Que estas flores iluminen tu día y te recuerden lo especial que eres.","Hoy las flores son amarillas, pero la razón de sonreír eres tú.","Incluso en otra vida reconocería tus ojos. ~Gustavo Cerati","Tú me hiciste saber que cuando es la persona correcta, no hay miedo, el amor se transforma y te trasciende. ~Gustavo Cerati","Hoy que estás espléndida y que todo lo iluminas, demos un paseo. ~Gustavo Cerati","Te amo como nunca antes amé. ~Gustavo Cerati","Recordarte es un hermoso lugar. ~Gustavo Cerati","Las cosas brillantes siempre salen de repente , como la geometría de una flor , es la palabra antes que tus labios la suelten . , sin secretos no hay amor ~Gustavo Cerati"];
-const flowerScene=document.querySelector("main.scene");const msg=document.querySelector("#msg"),next=document.querySelector("#next");let i=0;let messageMusic=null;let flowerAnimRunning=true;let flowerSpawnTimer=null;
-function startFlowerLoop(){
-  if(flowerSpawnTimer) return;
-  const templates=[...flowerScene.querySelectorAll(".flower")];
-  const spawn=()=>{
-    if(!flowerAnimRunning) return;
-    const f=templates[Math.floor(Math.random()*templates.length)].cloneNode(true);
-    f.classList.add("spawnedFlower");
-    f.style.left=(Math.random()*90+3)+"%";
-    f.style.right="auto";
-    f.style.setProperty("--s",(80+Math.random()*75)+"px");
-    f.style.setProperty("--speed",(3+Math.random()*2)+"s");
-    f.style.zIndex="2";
-    flowerScene.appendChild(f);
-    setTimeout(()=>f.remove(),10000);
-  };
-  spawn();
-  flowerSpawnTimer=setInterval(spawn,5000);
-}
-function stopFlowerLoop(){
-  flowerAnimRunning=false;
-  if(flowerSpawnTimer){clearInterval(flowerSpawnTimer);flowerSpawnTimer=null}
-  flowerScene.querySelectorAll(".spawnedFlower").forEach(f=>f.remove());
-}
-startFlowerLoop();msg.textContent="“"+messages[0]+"”";
+const flowerScene=document.querySelector("main.scene");const msg=document.querySelector("#msg"),next=document.querySelector("#next");let i=0;let messageMusic=null;let flowerAnimRunning=true;msg.textContent="“"+messages[0]+"”";
 function startMessageMusic(){if(!messageMusic){messageMusic=new Audio("./vivo.mpeg");messageMusic.loop=true}messageMusic.play().catch(()=>{})}
 function stopMessageMusic(){if(messageMusic){messageMusic.pause();messageMusic.currentTime=0}}
 const surpriseBtn=document.querySelector("#surpriseBtn");next.onclick=()=>{startMessageMusic();if(i<messages.length-1){msg.classList.add("hide");setTimeout(()=>{i++;msg.textContent="“"+messages[i]+"”";msg.classList.remove("hide");if(i===messages.length-1){next.classList.add("hidden");surpriseBtn.classList.remove("hidden")}},300)}};surpriseBtn.onclick=showSurprise;
@@ -56,7 +32,35 @@ document.querySelector("#loveBack").onclick=()=>{
   closeLoveStage();
 };
 
+function startPhotoFlowerLoop(){
+  stopPhotoFlowerLoop();
+  const spawn=()=>{
+    if(!loveStage.classList.contains("hiddenLove")){
+      const templates=[...document.querySelectorAll("main.scene > .flower")];
+      if(templates.length){
+        const f=templates[Math.floor(Math.random()*templates.length)].cloneNode(true);
+        f.classList.add("photoFlower");
+        f.style.left=(Math.random()*90+3)+"%";
+        f.style.right="auto";
+        f.style.bottom="-35px";
+        f.style.setProperty("--s",(80+Math.random()*75)+"px");
+        f.style.setProperty("--speed",(3+Math.random()*2)+"s");
+        f.style.zIndex="31";
+        loveStage.appendChild(f);
+        setTimeout(()=>f.remove(),10000);
+      }
+    }
+  };
+  spawn();
+  loveStage._photoFlowerTimer=setInterval(spawn,5000);
+}
+function stopPhotoFlowerLoop(){
+  if(loveStage._photoFlowerTimer){clearInterval(loveStage._photoFlowerTimer);loveStage._photoFlowerTimer=null}
+  loveStage.querySelectorAll(".photoFlower").forEach(f=>f.remove());
+}
+
 function startLoveShow(){
+  startPhotoFlowerLoop();
   // Carga las fotos de Daroly dentro del mismo apartado de Te amo.
   const oldShow=document.querySelector("#lovePhotoShow");
   if(oldShow) oldShow.remove();
@@ -146,6 +150,7 @@ function launchBouquets(){
 }
 
 function closeLoveStage(){
+  stopPhotoFlowerLoop();
   if(loveStage._loveTimer) clearInterval(loveStage._loveTimer);
   if(loveStage._loveMusic){loveStage._loveMusic.pause();loveStage._loveMusic.currentTime=0;}
   if(loveStage._loveShow) loveStage._loveShow.remove();
