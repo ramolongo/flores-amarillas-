@@ -41,11 +41,47 @@ function startLoveShow(){
   const photo=document.querySelector("#lovePhoto");
   const countdown=document.querySelector("#loveCountdown");
   const count=document.querySelector("#lovePhotoCount");
-  const photos=["./daroly.jpeg","./daroly 2.jpg","./daroly 3.jpg","./daroly 4.jpg","./daroly 5.jpg","./daroly 6.jpeg","./daroly 7.jpeg"];
+  // 17 fotos en secuencia. Las 10 últimas quedan preparadas para cuando las subas.
+  const photos=[
+    "./daroly.jpeg",
+    "./daroly 2.jpg",
+    "./daroly 3.jpg",
+    "./daroly 4.jpg",
+    "./daroly 5.jpg",
+    "./daroly 6.jpeg",
+    "./daroly 7.jpeg",
+    "./daroly 8.jpg",
+    "./daroly 9.jpg",
+    "./daroly 10.jpg",
+    "./daroly 11.jpg",
+    "./daroly 12.jpg",
+    "./daroly 13.jpg",
+    "./daroly 14.jpg",
+    "./daroly 15.jpg",
+    "./daroly 16.jpg",
+    "./daroly 17.jpg"
+  ];
   let photoIndex=0,seconds=10;
 
+  const showPhoto=()=>{
+    photo.style.opacity="0";
+    const nextSrc=photos[photoIndex];
+    const preload=new Image();
+    preload.onload=()=>{
+      photo.src=nextSrc;
+      count.textContent=(photoIndex+1)+" / "+photos.length;
+      photo.style.opacity="1";
+    };
+    preload.onerror=()=>{
+      // Si una de las fotos futuras todavía no existe, continúa con la siguiente.
+      photoIndex=(photoIndex+1)%photos.length;
+      showPhoto();
+    };
+    preload.src=nextSrc;
+  };
+
   photo.src=photos[0];
-  count.textContent="1 / 7";
+  count.textContent="1 / "+photos.length;
   countdown.textContent="10";
 
   const timer=setInterval(()=>{
@@ -53,25 +89,19 @@ function startLoveShow(){
     countdown.textContent=seconds;
     if(seconds<=0){
       seconds=10;
-      photoIndex++;
-      if(photoIndex>=photos.length){
-        clearInterval(timer);
-        countdown.textContent="❤️";
-        count.textContent="7 / 7";
-        return;
-      }
-      photo.style.opacity="0";
-      setTimeout(()=>{
-        photo.src=photos[photoIndex];
-        count.textContent=(photoIndex+1)+" / 7";
-        photo.onload=()=>photo.style.opacity="1";
-      },500);
+      photoIndex=(photoIndex+1)%photos.length;
+      showPhoto();
     }
   },1000);
 
-  // Música local subida al repositorio; se inicia tras la pulsación del botón.
+  // Las fotos se repiten en bucle mientras dure la canción.
   const music=new Audio("./puesto.mpeg");
-  music.loop=true;
+  music.loop=false;
+  music.addEventListener("ended",()=>{
+    clearInterval(timer);
+    countdown.textContent="❤️";
+    count.textContent=photos.length+" / "+photos.length;
+  });
   music.play().catch(()=>{});
   loveStage._loveTimer=timer;
   loveStage._loveMusic=music;
