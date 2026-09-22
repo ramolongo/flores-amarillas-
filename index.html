@@ -13,7 +13,7 @@ const msg=document.querySelector("#msg"),next=document.querySelector("#next");le
 function startMessageMusic(){if(!messageMusic){messageMusic=new Audio("./vivo.mpeg");messageMusic.loop=true}messageMusic.play().catch(()=>{})}
 function stopMessageMusic(){if(messageMusic){messageMusic.pause();messageMusic.currentTime=0}}
 const surpriseBtn=document.querySelector("#surpriseBtn");next.onclick=()=>{startMessageMusic();if(i<messages.length-1){msg.classList.add("hide");setTimeout(()=>{i++;msg.textContent="“"+messages[i]+"”";msg.classList.remove("hide");if(i===messages.length-1){next.classList.add("hidden");surpriseBtn.classList.remove("hidden")}},300)}};surpriseBtn.onclick=showSurprise;
-function showSurprise(){stopMessageMusic();document.querySelector("#messages").classList.add("hidden");document.querySelector("#surprise").classList.remove("hidden");speak()}
+let amorMusic=null;function startAmorMusic(){if(!amorMusic){amorMusic=new Audio("./amor.mpeg");amorMusic.loop=true}amorMusic.play().catch(()=>{})}function stopAmorMusic(){if(amorMusic){amorMusic.pause();amorMusic.currentTime=0}}function showSurprise(){stopMessageMusic();startAmorMusic();document.querySelector("#messages").classList.add("hidden");document.querySelector("#surprise").classList.remove("hidden");speak()}
 const speech=document.querySelector("#speech"),lines=["¡Hola! 🐱","Mira, te traje un pequeño detalle amarillo, porque hoy quería hacerte sonreír.","Sé que son solo unas flores, pero llevan un mensaje muy especial para ti.","Gracias por cada momento bonito que hemos compartido.","Gracias por escucharme, por aconsejarme y por estar presente cuando te necesito.","También quiero agradecerte por todas esas pequeñas cosas que quizá parecen simples, pero que para mí significan muchísimo.","Me gusta poder compartir momentos contigo y guardar recuerdos que me hacen sonreír.","Espero que nunca te falten motivos para sonreír, cumplir tus sueños y disfrutar cada día.","Y si algún día tienes uno de esos días difíciles, recuerda que también mereces recibir flores y cosas bonitas.","Gracias por ser una persona tan especial para mí.","Gracias por estar conmigo, por tu tiempo y por todo lo que hemos vivido juntos. <span class='heart'>💛</span>"];
 function speak(){let n=0;speech.innerHTML=lines[0];const timer=setInterval(()=>{n++;if(n>=lines.length){clearInterval(timer);document.querySelector("#teAmoBtn").classList.remove("hidden");return}speech.innerHTML=lines[n]},8000)}
 const teAmoBtn=document.querySelector("#teAmoBtn"),loveStage=document.querySelector("#loveStage");
@@ -21,6 +21,7 @@ const teAmoBtn=document.querySelector("#teAmoBtn"),loveStage=document.querySelec
 teAmoBtn.classList.remove("hidden");
 
 teAmoBtn.onclick=()=>{
+  stopAmorMusic();
   stopMessageMusic();
   loveStage.classList.remove("hiddenLove");
   startLoveShow();
