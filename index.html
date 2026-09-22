@@ -13,7 +13,7 @@ const flowerScene=document.querySelector("main.scene");const msg=document.queryS
 function startMessageMusic(){if(!messageMusic){messageMusic=new Audio("./vivo.mpeg");messageMusic.loop=true}messageMusic.play().catch(()=>{})}
 function stopMessageMusic(){if(messageMusic){messageMusic.pause();messageMusic.currentTime=0}}
 const surpriseBtn=document.querySelector("#surpriseBtn");next.onclick=()=>{startMessageMusic();if(i<messages.length-1){msg.classList.add("hide");setTimeout(()=>{i++;msg.textContent="“"+messages[i]+"”";msg.classList.remove("hide");if(i===messages.length-1){next.classList.add("hidden");surpriseBtn.classList.remove("hidden")}},300)}};surpriseBtn.onclick=showSurprise;
-let amorMusic=null;function startAmorMusic(){if(!amorMusic){amorMusic=new Audio("./amor.mpeg");amorMusic.loop=true}amorMusic.play().catch(()=>{})}function stopAmorMusic(){if(amorMusic){amorMusic.pause();amorMusic.currentTime=0}}function showSurprise(){stopMessageMusic();startAmorMusic();stopFlowerLoop();document.querySelector("main.scene").querySelectorAll(".flower").forEach(f=>f.style.animationPlayState="paused");document.querySelector("#messages").classList.add("hidden");document.querySelector("#surprise").classList.remove("hidden");speak()}
+let amorMusic=null;function startAmorMusic(){if(!amorMusic){amorMusic=new Audio("./amor.mpeg");amorMusic.loop=true}amorMusic.play().catch(()=>{})}function stopAmorMusic(){if(amorMusic){amorMusic.pause();amorMusic.currentTime=0}}function showSurprise(){stopMessageMusic();startAmorMusic();document.querySelector("#messages").classList.add("hidden");document.querySelector("#surprise").classList.remove("hidden");window._surpriseFlowerTimer=createFlowerLoop(document.querySelector("#surprise"),"surpriseFlower",5);speak()}
 const speech=document.querySelector("#speech"),lines=["¡Hola! 🐱","Mira, te traje un pequeño detalle amarillo, porque hoy quería hacerte sonreír.","Sé que son solo unas flores, pero llevan un mensaje muy especial para ti.","Gracias por cada momento bonito que hemos compartido.","Gracias por escucharme, por aconsejarme y por estar presente cuando te necesito.","También quiero agradecerte por todas esas pequeñas cosas que quizá parecen simples, pero que para mí significan muchísimo.","Me gusta poder compartir momentos contigo y guardar recuerdos que me hacen sonreír.","Espero que nunca te falten motivos para sonreír, cumplir tus sueños y disfrutar cada día.","Y si algún día tienes uno de esos días difíciles, recuerda que también mereces recibir flores y cosas bonitas.","Gracias por ser una persona tan especial para mí.","Gracias por estar conmigo, por tu tiempo y por todo lo que hemos vivido juntos. <span class='heart'>💛</span>"];
 function speak(){let n=0;speech.innerHTML=lines[0];const timer=setInterval(()=>{n++;if(n>=lines.length){clearInterval(timer);document.querySelector("#teAmoBtn").classList.remove("hidden");return}speech.innerHTML=lines[n]},8000)}
 const teAmoBtn=document.querySelector("#teAmoBtn"),loveStage=document.querySelector("#loveStage");
@@ -32,32 +32,28 @@ document.querySelector("#loveBack").onclick=()=>{
   closeLoveStage();
 };
 
-function startPhotoFlowerLoop(){
-  stopPhotoFlowerLoop();
+function createFlowerLoop(container, className, zIndex){
+  let timer=null;
   const spawn=()=>{
-    if(!loveStage.classList.contains("hiddenLove")){
-      const templates=[...document.querySelectorAll("main.scene > .flower")];
-      if(templates.length){
-        const f=templates[Math.floor(Math.random()*templates.length)].cloneNode(true);
-        f.classList.add("photoFlower");
-        f.style.left=(Math.random()*90+3)+"%";
-        f.style.right="auto";
-        f.style.bottom="-35px";
-        f.style.setProperty("--s",(80+Math.random()*75)+"px");
-        f.style.setProperty("--speed",(3+Math.random()*2)+"s");
-        f.style.zIndex="31";
-        loveStage.appendChild(f);
-        setTimeout(()=>f.remove(),10000);
-      }
-    }
+    const templates=[...document.querySelectorAll("main.scene > .flower")];
+    if(!templates.length) return;
+    const f=templates[Math.floor(Math.random()*templates.length)].cloneNode(true);
+    f.classList.add(className);
+    f.style.left=(Math.random()*90+3)+"%";
+    f.style.right="auto";
+    f.style.bottom="-35px";
+    f.style.setProperty("--s",(80+Math.random()*75)+"px");
+    f.style.setProperty("--speed",(3+Math.random()*2)+"s");
+    f.style.zIndex=String(zIndex);
+    container.appendChild(f);
+    setTimeout(()=>f.remove(),10000);
   };
   spawn();
-  loveStage._photoFlowerTimer=setInterval(spawn,5000);
+  timer=setInterval(spawn,5000);
+  return timer;
 }
-function stopPhotoFlowerLoop(){
-  if(loveStage._photoFlowerTimer){clearInterval(loveStage._photoFlowerTimer);loveStage._photoFlowerTimer=null}
-  loveStage.querySelectorAll(".photoFlower").forEach(f=>f.remove());
-}
+function startPhotoFlowerLoop(){stopPhotoFlowerLoop();loveStage._photoFlowerTimer=createFlowerLoop(loveStage,"photoFlower",31)}
+function stopPhotoFlowerLoop(){if(loveStage._photoFlowerTimer){clearInterval(loveStage._photoFlowerTimer);loveStage._photoFlowerTimer=null}loveStage.querySelectorAll(".photoFlower").forEach(f=>f.remove())}
 
 function startLoveShow(){
   startPhotoFlowerLoop();
@@ -151,6 +147,8 @@ function launchBouquets(){
 
 function closeLoveStage(){
   stopPhotoFlowerLoop();
+  if(window._surpriseFlowerTimer){clearInterval(window._surpriseFlowerTimer);window._surpriseFlowerTimer=null}
+  document.querySelectorAll(".surpriseFlower").forEach(f=>f.remove());
   if(loveStage._loveTimer) clearInterval(loveStage._loveTimer);
   if(loveStage._loveMusic){loveStage._loveMusic.pause();loveStage._loveMusic.currentTime=0;}
   if(loveStage._loveShow) loveStage._loveShow.remove();
